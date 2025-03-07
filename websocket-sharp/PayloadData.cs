@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2025 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,9 +36,10 @@ namespace WebSocketSharp
   {
     #region Private Fields
 
-    private byte[] _data;
-    private long   _extDataLength;
-    private long   _length;
+    private byte[]                 _data;
+    private static readonly byte[] _emptyBytes;
+    private long                   _extDataLength;
+    private long                   _length;
 
     #endregion
 
@@ -71,7 +72,9 @@ namespace WebSocketSharp
 
     static PayloadData ()
     {
-      Empty = new PayloadData (WebSocket.EmptyBytes, 0);
+      _emptyBytes = new byte[0];
+
+      Empty = new PayloadData (_emptyBytes, 0);
       MaxLength = Int64.MaxValue;
     }
 
@@ -155,7 +158,7 @@ namespace WebSocketSharp
       get {
         return _extDataLength > 0
                ? _data.SubArray (0, _extDataLength)
-               : WebSocket.EmptyBytes;
+               : _emptyBytes;
       }
     }
 

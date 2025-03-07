@@ -8,7 +8,7 @@
  * The MIT License
  *
  * Copyright (c) 2005 Ximian, Inc. (http://www.ximian.com)
- * Copyright (c) 2012-2021 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,6 +59,7 @@ namespace WebSocketSharp.Net
     private HttpListenerContext _context;
     private bool                _endCalled;
     private Exception           _exception;
+    private Logger              _log;
     private object              _state;
     private object              _sync;
     private ManualResetEvent    _waitHandle;
@@ -67,10 +68,15 @@ namespace WebSocketSharp.Net
 
     #region Internal Constructors
 
-    internal HttpListenerAsyncResult (AsyncCallback callback, object state)
+    internal HttpListenerAsyncResult (
+      AsyncCallback callback,
+      object state,
+      Logger log
+    )
     {
       _callback = callback;
       _state = state;
+      _log = log;
 
       _sync = new object ();
     }
@@ -160,7 +166,9 @@ namespace WebSocketSharp.Net
           try {
             _callback (this);
           }
-          catch {
+          catch (Exception ex) {
+            _log.Error (ex.Message);
+            _log.Debug (ex.ToString ());
           }
         },
         null
@@ -179,7 +187,8 @@ namespace WebSocketSharp.Net
     }
 
     internal void Complete (
-      HttpListenerContext context, bool completedSynchronously
+      HttpListenerContext context,
+      bool completedSynchronously
     )
     {
       _context = context;

@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2013-2022 sta.blockhead
+ * Copyright (c) 2013-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -166,7 +166,7 @@ namespace WebSocketSharp
     ///   An <see cref="T:System.Action{LogData, string}"/> delegate.
     ///   </para>
     ///   <para>
-    ///   It references the method used to output a log.
+    ///   It represents the delegate called when the logger outputs a log.
     ///   </para>
     ///   <para>
     ///   The string parameter passed to the delegate is the value of
@@ -215,7 +215,9 @@ namespace WebSocketSharp
         }
         catch (Exception ex) {
           var data = new LogData (
-                       LogLevel.Fatal, new StackFrame (0, true), ex.Message
+                       LogLevel.Fatal,
+                       new StackFrame (0, true),
+                       ex.Message
                      );
 
           Console.WriteLine (data.ToString ());

@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2023 sta.blockhead
+ * Copyright (c) 2012-2025 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,6 @@ namespace WebSocketSharp.Server
       _log = log;
 
       _forSweep = new object ();
-      _keepClean = true;
       _sessions = new Dictionary<string, IWebSocketSession> ();
       _state = ServerState.Ready;
       _sync = ((ICollection) _sessions).SyncRoot;
@@ -105,7 +104,8 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <c>IEnumerable&lt;string&gt;</c> instance.
+    ///   An <see cref="T:System.Collections.Generic.IEnumerable{string}"/>
+    ///   instance.
     ///   </para>
     ///   <para>
     ///   It provides an enumerator which supports the iteration over
@@ -139,7 +139,8 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <c>IEnumerable&lt;string&gt;</c> instance.
+    ///   An <see cref="T:System.Collections.Generic.IEnumerable{string}"/>
+    ///   instance.
     ///   </para>
     ///   <para>
     ///   It provides an enumerator which supports the iteration over
@@ -165,7 +166,8 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <c>IEnumerable&lt;string&gt;</c> instance.
+    ///   An <see cref="T:System.Collections.Generic.IEnumerable{string}"/>
+    ///   instance.
     ///   </para>
     ///   <para>
     ///   It provides an enumerator which supports the iteration over
@@ -186,22 +188,21 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   A <see cref="IWebSocketSession"/> instance or <see langword="null"/>
-    ///   if not found.
+    ///   A <see cref="IWebSocketSession"/> instance that provides
+    ///   the function to access the information in the session.
     ///   </para>
     ///   <para>
-    ///   The session instance provides the function to access the information
-    ///   in the session.
+    ///   <see langword="null"/> if not found.
     ///   </para>
     /// </value>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session to find.
+    /// A <see cref="string"/> that specifies the ID of the session to get.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="id"/> is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     public IWebSocketSession this[string id] {
       get {
@@ -251,7 +252,8 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <c>IEnumerable&lt;IWebSocketSession&gt;</c> instance.
+    ///   An <see cref="T:System.Collections.Generic.IEnumerable{IWebSocketSession}"/>
+    ///   instance.
     ///   </para>
     ///   <para>
     ///   It provides an enumerator which supports the iteration over
@@ -340,10 +342,12 @@ namespace WebSocketSharp.Server
     }
 
     private void broadcast (
-      Opcode opcode, Stream sourceStream, Action completed
+      Opcode opcode,
+      Stream sourceStream,
+      Action completed
     )
     {
-      var cache = new Dictionary <CompressionMethod, Stream> ();
+      var cache = new Dictionary<CompressionMethod, Stream> ();
 
       try {
         foreach (var session in Sessions) {
@@ -379,7 +383,9 @@ namespace WebSocketSharp.Server
     }
 
     private void broadcastAsync (
-      Opcode opcode, Stream sourceStream, Action completed
+      Opcode opcode,
+      Stream sourceStream,
+      Action completed
     )
     {
       ThreadPool.QueueUserWorkItem (
@@ -512,11 +518,11 @@ namespace WebSocketSharp.Server
     /// <param name="data">
     /// An array of <see cref="byte"/> that specifies the binary data to send.
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The current state of the service is not Start.
-    /// </exception>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="data"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The current state of the service is not Start.
     /// </exception>
     public void Broadcast (byte[] data)
     {
@@ -541,14 +547,14 @@ namespace WebSocketSharp.Server
     /// <param name="data">
     /// A <see cref="string"/> that specifies the text data to send.
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The current state of the service is not Start.
+    /// <exception cref="ArgumentException">
+    /// <paramref name="data"/> could not be UTF-8-encoded.
     /// </exception>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="data"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="ArgumentException">
-    /// <paramref name="data"/> could not be UTF-8-encoded.
+    /// <exception cref="InvalidOperationException">
+    /// The current state of the service is not Start.
     /// </exception>
     public void Broadcast (string data)
     {
@@ -590,12 +596,6 @@ namespace WebSocketSharp.Server
     /// <param name="length">
     /// An <see cref="int"/> that specifies the number of bytes to send.
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The current state of the service is not Start.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="stream"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="stream"/> cannot be read.
@@ -612,6 +612,12 @@ namespace WebSocketSharp.Server
     ///   <para>
     ///   No data could be read from <paramref name="stream"/>.
     ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="stream"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The current state of the service is not Start.
     /// </exception>
     public void Broadcast (Stream stream, int length)
     {
@@ -673,17 +679,17 @@ namespace WebSocketSharp.Server
     ///   An <see cref="Action"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the send is complete.
+    ///   It specifies the delegate called when the send is complete.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
     ///   </para>
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The current state of the service is not Start.
-    /// </exception>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="data"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The current state of the service is not Start.
     /// </exception>
     public void BroadcastAsync (byte[] data, Action completed)
     {
@@ -717,20 +723,20 @@ namespace WebSocketSharp.Server
     ///   An <see cref="Action"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the send is complete.
+    ///   It specifies the delegate called when the send is complete.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
     ///   </para>
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The current state of the service is not Start.
+    /// <exception cref="ArgumentException">
+    /// <paramref name="data"/> could not be UTF-8-encoded.
     /// </exception>
     /// <exception cref="ArgumentNullException">
     /// <paramref name="data"/> is <see langword="null"/>.
     /// </exception>
-    /// <exception cref="ArgumentException">
-    /// <paramref name="data"/> could not be UTF-8-encoded.
+    /// <exception cref="InvalidOperationException">
+    /// The current state of the service is not Start.
     /// </exception>
     public void BroadcastAsync (string data, Action completed)
     {
@@ -780,18 +786,12 @@ namespace WebSocketSharp.Server
     ///   An <see cref="Action"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the send is complete.
+    ///   It specifies the delegate called when the send is complete.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
     ///   </para>
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The current state of the service is not Start.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="stream"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="stream"/> cannot be read.
@@ -808,6 +808,12 @@ namespace WebSocketSharp.Server
     ///   <para>
     ///   No data could be read from <paramref name="stream"/>.
     ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="stream"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The current state of the service is not Start.
     /// </exception>
     public void BroadcastAsync (Stream stream, int length, Action completed)
     {
@@ -860,11 +866,11 @@ namespace WebSocketSharp.Server
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session to close.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="id"/> is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
     /// The session could not be found.
@@ -883,7 +889,7 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Closes the session with the specified ID, code, and reason.
+    /// Closes the session with the specified ID, status code, and reason.
     /// </summary>
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session to close.
@@ -907,9 +913,6 @@ namespace WebSocketSharp.Server
     ///   Its size must be 123 bytes or less in UTF-8.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
@@ -934,8 +937,8 @@ namespace WebSocketSharp.Server
     ///   <paramref name="reason"/> could not be UTF-8-encoded.
     ///   </para>
     /// </exception>
-    /// <exception cref="InvalidOperationException">
-    /// The session could not be found.
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///   <para>
@@ -947,6 +950,9 @@ namespace WebSocketSharp.Server
     ///   <para>
     ///   The size of <paramref name="reason"/> is greater than 123 bytes.
     ///   </para>
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The session could not be found.
     /// </exception>
     public void CloseSession (string id, ushort code, string reason)
     {
@@ -962,7 +968,7 @@ namespace WebSocketSharp.Server
     }
 
     /// <summary>
-    /// Closes the session with the specified ID, code, and reason.
+    /// Closes the session with the specified ID, status code, and reason.
     /// </summary>
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session to close.
@@ -983,12 +989,15 @@ namespace WebSocketSharp.Server
     ///   Its size must be 123 bytes or less in UTF-8.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
+    ///   </para>
+    ///   <para>
+    ///   -or-
+    ///   </para>
+    ///   <para>
+    ///   <paramref name="code"/> is an undefined enum value.
     ///   </para>
     ///   <para>
     ///   -or-
@@ -1010,11 +1019,14 @@ namespace WebSocketSharp.Server
     ///   <paramref name="reason"/> could not be UTF-8-encoded.
     ///   </para>
     /// </exception>
-    /// <exception cref="InvalidOperationException">
-    /// The session could not be found.
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     /// The size of <paramref name="reason"/> is greater than 123 bytes.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The session could not be found.
     /// </exception>
     public void CloseSession (string id, CloseStatusCode code, string reason)
     {
@@ -1039,11 +1051,11 @@ namespace WebSocketSharp.Server
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="id"/> is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
     /// The session could not be found.
@@ -1080,9 +1092,6 @@ namespace WebSocketSharp.Server
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
@@ -1094,11 +1103,14 @@ namespace WebSocketSharp.Server
     ///   <paramref name="message"/> could not be UTF-8-encoded.
     ///   </para>
     /// </exception>
-    /// <exception cref="InvalidOperationException">
-    /// The session could not be found.
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     /// The size of <paramref name="message"/> is greater than 125 bytes.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// The session could not be found.
     /// </exception>
     public bool PingTo (string message, string id)
     {
@@ -1122,6 +1134,9 @@ namespace WebSocketSharp.Server
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session.
     /// </param>
+    /// <exception cref="ArgumentException">
+    /// <paramref name="id"/> is an empty string.
+    /// </exception>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1132,9 +1147,6 @@ namespace WebSocketSharp.Server
     ///   <para>
     ///   <paramref name="data"/> is <see langword="null"/>.
     ///   </para>
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    /// <paramref name="id"/> is an empty string.
     /// </exception>
     /// <exception cref="InvalidOperationException">
     ///   <para>
@@ -1169,17 +1181,6 @@ namespace WebSocketSharp.Server
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <para>
-    ///   <paramref name="id"/> is <see langword="null"/>.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="data"/> is <see langword="null"/>.
-    ///   </para>
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
@@ -1189,6 +1190,17 @@ namespace WebSocketSharp.Server
     ///   </para>
     ///   <para>
     ///   <paramref name="data"/> could not be UTF-8-encoded.
+    ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    ///   <para>
+    ///   <paramref name="id"/> is <see langword="null"/>.
+    ///   </para>
+    ///   <para>
+    ///   -or-
+    ///   </para>
+    ///   <para>
+    ///   <paramref name="data"/> is <see langword="null"/>.
     ///   </para>
     /// </exception>
     /// <exception cref="InvalidOperationException">
@@ -1233,17 +1245,6 @@ namespace WebSocketSharp.Server
     /// <param name="id">
     /// A <see cref="string"/> that specifies the ID of the session.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <para>
-    ///   <paramref name="id"/> is <see langword="null"/>.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="stream"/> is <see langword="null"/>.
-    ///   </para>
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
@@ -1265,6 +1266,17 @@ namespace WebSocketSharp.Server
     ///   </para>
     ///   <para>
     ///   No data could be read from <paramref name="stream"/>.
+    ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    ///   <para>
+    ///   <paramref name="id"/> is <see langword="null"/>.
+    ///   </para>
+    ///   <para>
+    ///   -or-
+    ///   </para>
+    ///   <para>
+    ///   <paramref name="stream"/> is <see langword="null"/>.
     ///   </para>
     /// </exception>
     /// <exception cref="InvalidOperationException">
@@ -1309,16 +1321,20 @@ namespace WebSocketSharp.Server
     ///   An <see cref="T:System.Action{bool}"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the send is complete.
+    ///   It specifies the delegate called when the send is complete.
     ///   </para>
     ///   <para>
-    ///   The <see cref="bool"/> parameter passed to the method is <c>true</c>
-    ///   if the send has successfully done; otherwise, <c>false</c>.
+    ///   The <see cref="bool"/> parameter passed to the delegate is
+    ///   <c>true</c> if the send has successfully done; otherwise,
+    ///   <c>false</c>.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
     ///   </para>
     /// </param>
+    /// <exception cref="ArgumentException">
+    /// <paramref name="id"/> is an empty string.
+    /// </exception>
     /// <exception cref="ArgumentNullException">
     ///   <para>
     ///   <paramref name="id"/> is <see langword="null"/>.
@@ -1329,9 +1345,6 @@ namespace WebSocketSharp.Server
     ///   <para>
     ///   <paramref name="data"/> is <see langword="null"/>.
     ///   </para>
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    /// <paramref name="id"/> is an empty string.
     /// </exception>
     /// <exception cref="InvalidOperationException">
     ///   <para>
@@ -1375,27 +1388,17 @@ namespace WebSocketSharp.Server
     ///   An <see cref="T:System.Action{bool}"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the send is complete.
+    ///   It specifies the delegate called when the send is complete.
     ///   </para>
     ///   <para>
-    ///   The <see cref="bool"/> parameter passed to the method is <c>true</c>
-    ///   if the send has successfully done; otherwise, <c>false</c>.
+    ///   The <see cref="bool"/> parameter passed to the delegate is
+    ///   <c>true</c> if the send has successfully done; otherwise,
+    ///   <c>false</c>.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <para>
-    ///   <paramref name="id"/> is <see langword="null"/>.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="data"/> is <see langword="null"/>.
-    ///   </para>
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
@@ -1405,6 +1408,17 @@ namespace WebSocketSharp.Server
     ///   </para>
     ///   <para>
     ///   <paramref name="data"/> could not be UTF-8-encoded.
+    ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    ///   <para>
+    ///   <paramref name="id"/> is <see langword="null"/>.
+    ///   </para>
+    ///   <para>
+    ///   -or-
+    ///   </para>
+    ///   <para>
+    ///   <paramref name="data"/> is <see langword="null"/>.
     ///   </para>
     /// </exception>
     /// <exception cref="InvalidOperationException">
@@ -1457,27 +1471,17 @@ namespace WebSocketSharp.Server
     ///   An <see cref="T:System.Action{bool}"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the send is complete.
+    ///   It specifies the delegate called when the send is complete.
     ///   </para>
     ///   <para>
-    ///   The <see cref="bool"/> parameter passed to the method is <c>true</c>
-    ///   if the send has successfully done; otherwise, <c>false</c>.
+    ///   The <see cref="bool"/> parameter passed to the delegate is
+    ///   <c>true</c> if the send has successfully done; otherwise,
+    ///   <c>false</c>.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <para>
-    ///   <paramref name="id"/> is <see langword="null"/>.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="stream"/> is <see langword="null"/>.
-    ///   </para>
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="id"/> is an empty string.
@@ -1501,6 +1505,17 @@ namespace WebSocketSharp.Server
     ///   No data could be read from <paramref name="stream"/>.
     ///   </para>
     /// </exception>
+    /// <exception cref="ArgumentNullException">
+    ///   <para>
+    ///   <paramref name="id"/> is <see langword="null"/>.
+    ///   </para>
+    ///   <para>
+    ///   -or-
+    ///   </para>
+    ///   <para>
+    ///   <paramref name="stream"/> is <see langword="null"/>.
+    ///   </para>
+    /// </exception>
     /// <exception cref="InvalidOperationException">
     ///   <para>
     ///   The session could not be found.
@@ -1513,7 +1528,10 @@ namespace WebSocketSharp.Server
     ///   </para>
     /// </exception>
     public void SendToAsync (
-      Stream stream, int length, string id, Action<bool> completed
+      Stream stream,
+      int length,
+      string id,
+      Action<bool> completed
     )
     {
       IWebSocketSession session;
@@ -1576,34 +1594,36 @@ namespace WebSocketSharp.Server
         }
       }
 
-      _sweeping = false;
+      lock (_forSweep)
+        _sweeping = false;
     }
 
     /// <summary>
     /// Tries to get the session instance with the specified ID.
     /// </summary>
     /// <returns>
-    /// <c>true</c> if the session instance is successfully found; otherwise,
-    /// <c>false</c>.
+    /// <c>true</c> if the try has succeeded; otherwise, <c>false</c>.
     /// </returns>
     /// <param name="id">
-    /// A <see cref="string"/> that specifies the ID of the session to find.
+    /// A <see cref="string"/> that specifies the ID of the session to get.
     /// </param>
     /// <param name="session">
     ///   <para>
-    ///   When this method returns, a <see cref="IWebSocketSession"/>
-    ///   instance or <see langword="null"/> if not found.
+    ///   When this method returns, a <see cref="IWebSocketSession"/> instance
+    ///   that receives the session instance.
     ///   </para>
     ///   <para>
-    ///   The session instance provides the function to access
-    ///   the information in the session.
+    ///   It provides the function to access the information in the session.
+    ///   </para>
+    ///   <para>
+    ///   <see langword="null"/> if not found.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="id"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="id"/> is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="id"/> is <see langword="null"/>.
     /// </exception>
     public bool TryGetSession (string id, out IWebSocketSession session)
     {

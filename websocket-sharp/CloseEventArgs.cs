@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,8 +47,8 @@ namespace WebSocketSharp
   {
     #region Private Fields
 
-    private bool        _clean;
     private PayloadData _payloadData;
+    private bool        _wasClean;
 
     #endregion
 
@@ -57,7 +57,7 @@ namespace WebSocketSharp
     internal CloseEventArgs (PayloadData payloadData, bool clean)
     {
       _payloadData = payloadData;
-      _clean = clean;
+      _wasClean = clean;
     }
 
     #endregion
@@ -109,7 +109,7 @@ namespace WebSocketSharp
     /// </value>
     public bool WasClean {
       get {
-        return _clean;
+        return _wasClean;
       }
     }
 

@@ -5,7 +5,7 @@
  * The MIT License
  *
  * Copyright (c) 2014 liryna
- * Copyright (c) 2014-2023 sta.blockhead
+ * Copyright (c) 2014-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,8 @@ using System.Security.Cryptography.X509Certificates;
 namespace WebSocketSharp.Net
 {
   /// <summary>
-  /// Stores the parameters for the <see cref="SslStream"/> used by clients.
+  /// Stores the parameters for an <see cref="SslStream"/> instance used by
+  /// a client.
   /// </summary>
   public class ClientSslConfiguration
   {
@@ -65,13 +66,13 @@ namespace WebSocketSharp.Net
     /// </summary>
     /// <param name="targetHost">
     /// A <see cref="string"/> that specifies the name of the server that
-    /// will share a secure connection with a client.
+    /// will share a secure connection with the client.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="targetHost"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="targetHost"/> is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="targetHost"/> is <see langword="null"/>.
     /// </exception>
     public ClientSslConfiguration (string targetHost)
     {
@@ -174,12 +175,12 @@ namespace WebSocketSharp.Net
     ///   A <see cref="LocalCertificateSelectionCallback"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when a client selects
+    ///   It represents the delegate called when the client selects
     ///   the certificate.
     ///   </para>
     ///   <para>
-    ///   The default value is a delegate that invokes a method that only
-    ///   returns <see langword="null"/>.
+    ///   The default value invokes a method that only returns
+    ///   <see langword="null"/>.
     ///   </para>
     /// </value>
     public LocalCertificateSelectionCallback ClientCertificateSelectionCallback {
@@ -231,12 +232,11 @@ namespace WebSocketSharp.Net
     ///   A <see cref="RemoteCertificateValidationCallback"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when a client validates
+    ///   It represents the delegate called when the client validates
     ///   the certificate.
     ///   </para>
     ///   <para>
-    ///   The default value is a delegate that invokes a method that only
-    ///   returns <c>true</c>.
+    ///   The default value invokes a method that only returns <c>true</c>.
     ///   </para>
     /// </value>
     public RemoteCertificateValidationCallback ServerCertificateValidationCallback {
@@ -257,13 +257,13 @@ namespace WebSocketSharp.Net
     /// </summary>
     /// <value>
     /// A <see cref="string"/> that represents the name of the server that
-    /// will share a secure connection with a client.
+    /// will share a secure connection with the client.
     /// </value>
-    /// <exception cref="ArgumentNullException">
-    /// The value specified for a set operation is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// The value specified for a set operation is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// The value specified for a set operation is <see langword="null"/>.
     /// </exception>
     public string TargetHost {
       get {

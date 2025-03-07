@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2023 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,6 @@ namespace WebSocketSharp.Server
       _log = log;
 
       _hosts = new Dictionary<string, WebSocketServiceHost> ();
-      _keepClean = true;
       _state = ServerState.Ready;
       _sync = ((ICollection) _hosts).SyncRoot;
       _waitTime = TimeSpan.FromSeconds (1);
@@ -87,7 +86,8 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <c>IEnumerable&lt;WebSocketServiceHost&gt;</c> instance.
+    ///   An <see cref="T:System.Collections.Generic.IEnumerable{WebSocketServiceHost}"/>
+    ///   instance.
     ///   </para>
     ///   <para>
     ///   It provides an enumerator which supports the iteration over
@@ -107,26 +107,25 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   A <see cref="WebSocketServiceHost"/> instance or
-    ///   <see langword="null"/> if not found.
+    ///   A <see cref="WebSocketServiceHost"/> instance that represents
+    ///   the service host instance.
     ///   </para>
     ///   <para>
-    ///   The service host instance provides the function to access
-    ///   the information in the service.
+    ///   It provides the function to access the information in the service.
+    ///   </para>
+    ///   <para>
+    ///   <see langword="null"/> if not found.
     ///   </para>
     /// </value>
     /// <param name="path">
     ///   <para>
     ///   A <see cref="string"/> that specifies an absolute path to
-    ///   the service to find.
+    ///   the service to get.
     ///   </para>
     ///   <para>
     ///   / is trimmed from the end of the string if present.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="path"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="path"/> is an empty string.
@@ -144,6 +143,9 @@ namespace WebSocketSharp.Server
     ///   <paramref name="path"/> includes either or both
     ///   query and fragment components.
     ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="path"/> is <see langword="null"/>.
     /// </exception>
     public WebSocketServiceHost this[string path] {
       get {
@@ -187,7 +189,7 @@ namespace WebSocketSharp.Server
     ///   seconds; otherwise, <c>false</c>.
     ///   </para>
     ///   <para>
-    ///   The default value is <c>true</c>.
+    ///   The default value is <c>false</c>.
     ///   </para>
     /// </value>
     public bool KeepClean {
@@ -213,7 +215,8 @@ namespace WebSocketSharp.Server
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <c>IEnumerable&lt;string&gt;</c> instance.
+    ///   An <see cref="T:System.Collections.Generic.IEnumerable{string}"/>
+    ///   instance.
     ///   </para>
     ///   <para>
     ///   It provides an enumerator which supports the iteration over
@@ -285,7 +288,8 @@ namespace WebSocketSharp.Server
     #region Internal Methods
 
     internal bool InternalTryGetServiceHost (
-      string path, out WebSocketServiceHost host
+      string path,
+      out WebSocketServiceHost host
     )
     {
       path = path.TrimSlashFromEnd ();
@@ -338,8 +342,8 @@ namespace WebSocketSharp.Server
     ///   An <see cref="T:System.Action{TBehavior}"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the service
-    ///   initializes a new session instance.
+    ///   It specifies the delegate called when the service initializes
+    ///   a new session instance.
     ///   </para>
     ///   <para>
     ///   <see langword="null"/> if not necessary.
@@ -356,9 +360,6 @@ namespace WebSocketSharp.Server
     ///   Also it must have a public parameterless constructor.
     ///   </para>
     /// </typeparam>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="path"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="path"/> is an empty string.
@@ -383,8 +384,12 @@ namespace WebSocketSharp.Server
     ///   <paramref name="path"/> is already in use.
     ///   </para>
     /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="path"/> is <see langword="null"/>.
+    /// </exception>
     public void AddService<TBehavior> (
-      string path, Action<TBehavior> initializer
+      string path,
+      Action<TBehavior> initializer
     )
       where TBehavior : WebSocketBehavior, new ()
     {
@@ -419,8 +424,8 @@ namespace WebSocketSharp.Server
 
         host = new WebSocketServiceHost<TBehavior> (path, initializer, _log);
 
-        if (!_keepClean)
-          host.KeepClean = false;
+        if (_keepClean)
+          host.KeepClean = true;
 
         if (_waitTime != host.WaitTime)
           host.WaitTime = _waitTime;
@@ -475,9 +480,6 @@ namespace WebSocketSharp.Server
     ///   / is trimmed from the end of the string if present.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="path"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="path"/> is an empty string.
@@ -495,6 +497,9 @@ namespace WebSocketSharp.Server
     ///   <paramref name="path"/> includes either or both
     ///   query and fragment components.
     ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="path"/> is <see langword="null"/>.
     /// </exception>
     public bool RemoveService (string path)
     {
@@ -537,13 +542,12 @@ namespace WebSocketSharp.Server
     /// the specified path.
     /// </summary>
     /// <returns>
-    /// <c>true</c> if the service is successfully found; otherwise,
-    /// <c>false</c>.
+    /// <c>true</c> if the try has succeeded; otherwise, <c>false</c>.
     /// </returns>
     /// <param name="path">
     ///   <para>
     ///   A <see cref="string"/> that specifies an absolute path to
-    ///   the service to find.
+    ///   the service to get.
     ///   </para>
     ///   <para>
     ///   / is trimmed from the end of the string if present.
@@ -552,16 +556,15 @@ namespace WebSocketSharp.Server
     /// <param name="host">
     ///   <para>
     ///   When this method returns, a <see cref="WebSocketServiceHost"/>
-    ///   instance or <see langword="null"/> if not found.
+    ///   instance that receives the service host instance.
     ///   </para>
     ///   <para>
-    ///   The service host instance provides the function to access
-    ///   the information in the service.
+    ///   It provides the function to access the information in the service.
+    ///   </para>
+    ///   <para>
+    ///   <see langword="null"/> if not found.
     ///   </para>
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="path"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     ///   <para>
     ///   <paramref name="path"/> is an empty string.
@@ -579,6 +582,9 @@ namespace WebSocketSharp.Server
     ///   <paramref name="path"/> includes either or both
     ///   query and fragment components.
     ///   </para>
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="path"/> is <see langword="null"/>.
     /// </exception>
     public bool TryGetServiceHost (string path, out WebSocketServiceHost host)
     {

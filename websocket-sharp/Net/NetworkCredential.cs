@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2014-2023 sta.blockhead
+ * Copyright (c) 2014-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -68,11 +68,11 @@ namespace WebSocketSharp.Net
     /// A <see cref="string"/> that specifies the password for the username
     /// associated with the credentials.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="username"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="username"/> is an empty string.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="username"/> is <see langword="null"/>.
     /// </exception>
     public NetworkCredential (string username, string password)
       : this (username, password, null, null)
@@ -99,14 +99,17 @@ namespace WebSocketSharp.Net
     /// An array of <see cref="string"/> that specifies the roles associated
     /// with the credentials if any.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="username"/> is <see langword="null"/>.
-    /// </exception>
     /// <exception cref="ArgumentException">
     /// <paramref name="username"/> is an empty string.
     /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="username"/> is <see langword="null"/>.
+    /// </exception>
     public NetworkCredential (
-      string username, string password, string domain, params string[] roles
+      string username,
+      string password,
+      string domain,
+      params string[] roles
     )
     {
       if (username == null)
@@ -128,13 +131,15 @@ namespace WebSocketSharp.Net
     /// <summary>
     /// Gets the domain associated with the credentials.
     /// </summary>
-    /// <remarks>
-    /// This property returns an empty string if the domain was initialized
-    /// with <see langword="null"/>.
-    /// </remarks>
     /// <value>
-    /// A <see cref="string"/> that represents the domain name to which
-    /// the username belongs.
+    ///   <para>
+    ///   A <see cref="string"/> that represents the domain name
+    ///   to which the username belongs.
+    ///   </para>
+    ///   <para>
+    ///   An empty string if the value was initialized with
+    ///   <see langword="null"/>.
+    ///   </para>
     /// </value>
     public string Domain {
       get {
@@ -149,12 +154,14 @@ namespace WebSocketSharp.Net
     /// <summary>
     /// Gets the password for the username associated with the credentials.
     /// </summary>
-    /// <remarks>
-    /// This property returns an empty string if the password was initialized
-    /// with <see langword="null"/>.
-    /// </remarks>
     /// <value>
-    /// A <see cref="string"/> that represents the password.
+    ///   <para>
+    ///   A <see cref="string"/> that represents the password.
+    ///   </para>
+    ///   <para>
+    ///   An empty string if the value was initialized with
+    ///   <see langword="null"/>.
+    ///   </para>
     /// </value>
     public string Password {
       get {
@@ -169,13 +176,15 @@ namespace WebSocketSharp.Net
     /// <summary>
     /// Gets the roles associated with the credentials.
     /// </summary>
-    /// <remarks>
-    /// This property returns an empty array if the roles were initialized
-    /// with <see langword="null"/>.
-    /// </remarks>
     /// <value>
-    /// An array of <see cref="string"/> that represents the role names
-    /// to which the username belongs.
+    ///   <para>
+    ///   An array of <see cref="string"/> that represents the role names
+    ///   to which the username belongs.
+    ///   </para>
+    ///   <para>
+    ///   An empty array if the value was initialized with
+    ///   <see langword="null"/>.
+    ///   </para>
     /// </value>
     public string[] Roles {
       get {

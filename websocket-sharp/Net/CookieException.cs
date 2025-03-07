@@ -7,7 +7,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2019 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -66,10 +66,11 @@ namespace WebSocketSharp.Net
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CookieException"/> class
-    /// with the serialized data.
+    /// with the specified serialized data.
     /// </summary>
     /// <param name="serializationInfo">
-    /// A <see cref="SerializationInfo"/> that holds the serialized object data.
+    /// A <see cref="SerializationInfo"/> that contains the serialized
+    /// object data.
     /// </param>
     /// <param name="streamingContext">
     /// A <see cref="StreamingContext"/> that specifies the source for
@@ -79,7 +80,8 @@ namespace WebSocketSharp.Net
     /// <paramref name="serializationInfo"/> is <see langword="null"/>.
     /// </exception>
     protected CookieException (
-      SerializationInfo serializationInfo, StreamingContext streamingContext
+      SerializationInfo serializationInfo,
+      StreamingContext streamingContext
     )
       : base (serializationInfo, streamingContext)
     {
@@ -122,7 +124,8 @@ namespace WebSocketSharp.Net
       )
     ]
     public override void GetObjectData (
-      SerializationInfo serializationInfo, StreamingContext streamingContext
+      SerializationInfo serializationInfo,
+      StreamingContext streamingContext
     )
     {
       base.GetObjectData (serializationInfo, streamingContext);
@@ -154,7 +157,8 @@ namespace WebSocketSharp.Net
       )
     ]
     void ISerializable.GetObjectData (
-      SerializationInfo serializationInfo, StreamingContext streamingContext
+      SerializationInfo serializationInfo,
+      StreamingContext streamingContext
     )
     {
       base.GetObjectData (serializationInfo, streamingContext);

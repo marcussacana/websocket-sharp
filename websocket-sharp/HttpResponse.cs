@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,10 @@ namespace WebSocketSharp
     #region Private Constructors
 
     private HttpResponse (
-      int code, string reason, Version version, NameValueCollection headers
+      int code,
+      string reason,
+      Version version,
+      NameValueCollection headers
     )
       : base (version, headers)
     {
@@ -92,10 +95,17 @@ namespace WebSocketSharp
       get {
         return _reason != null
                ? String.Format (
-                   "HTTP/{0} {1} {2}{3}", ProtocolVersion, _code, _reason, CrLf
+                   "HTTP/{0} {1} {2}{3}",
+                   ProtocolVersion,
+                   _code,
+                   _reason,
+                   CrLf
                  )
                : String.Format (
-                   "HTTP/{0} {1}{2}", ProtocolVersion, _code, CrLf
+                   "HTTP/{0} {1}{2}",
+                   ProtocolVersion,
+                   _code,
+                   CrLf
                  );
       }
     }
@@ -234,7 +244,8 @@ namespace WebSocketSharp
     }
 
     internal static HttpResponse ReadResponse (
-      Stream stream, int millisecondsTimeout
+      Stream stream,
+      int millisecondsTimeout
     )
     {
       return Read<HttpResponse> (stream, Parse, millisecondsTimeout);

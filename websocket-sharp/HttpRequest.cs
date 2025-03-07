@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,9 +81,9 @@ namespace WebSocketSharp
 
     internal string RequestLine {
       get {
-        return String.Format (
-                 "{0} {1} HTTP/{2}{3}", _method, _target, ProtocolVersion, CrLf
-               );
+        var fmt = "{0} {1} HTTP/{2}{3}";
+
+        return String.Format (fmt, _method, _target, ProtocolVersion, CrLf);
       }
     }
 
@@ -142,9 +142,10 @@ namespace WebSocketSharp
 
     internal static HttpRequest CreateConnectRequest (Uri targetUri)
     {
+      var fmt = "{0}:{1}";
       var host = targetUri.DnsSafeHost;
       var port = targetUri.Port;
-      var authority = String.Format ("{0}:{1}", host, port);
+      var authority = String.Format (fmt, host, port);
 
       var ret = new HttpRequest ("CONNECT", authority);
 
@@ -161,10 +162,10 @@ namespace WebSocketSharp
 
       var port = targetUri.Port;
       var schm = targetUri.Scheme;
-      var defaultPort = (port == 80 && schm == "ws")
-                        || (port == 443 && schm == "wss");
+      var isDefaultPort = (port == 80 && schm == "ws")
+                          || (port == 443 && schm == "wss");
 
-      headers["Host"] = !defaultPort
+      headers["Host"] = !isDefaultPort
                         ? targetUri.Authority
                         : targetUri.DnsSafeHost;
 
@@ -212,7 +213,8 @@ namespace WebSocketSharp
     }
 
     internal static HttpRequest ReadRequest (
-      Stream stream, int millisecondsTimeout
+      Stream stream,
+      int millisecondsTimeout
     )
     {
       return Read<HttpRequest> (stream, Parse, millisecondsTimeout);

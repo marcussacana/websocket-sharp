@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,9 @@ namespace WebSocketSharp
     #region Private Constructors
 
     private WebSocketException (
-      ushort code, string message, Exception innerException
+      ushort code,
+      string message,
+      Exception innerException
     )
       : base (message ?? code.GetErrorMessage (), innerException)
     {
@@ -92,7 +94,9 @@ namespace WebSocketSharp
     }
 
     internal WebSocketException (
-      CloseStatusCode code, string message, Exception innerException
+      CloseStatusCode code,
+      string message,
+      Exception innerException
     )
       : this ((ushort) code, message, innerException)
     {

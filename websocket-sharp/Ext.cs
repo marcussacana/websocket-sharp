@@ -3,9 +3,9 @@
  * Ext.cs
  *
  * Some parts of this code are derived from Mono (http://www.mono-project.com):
- * - GetStatusDescription is derived from HttpListenerResponse.cs (System.Net)
- * - MaybeUri is derived from Uri.cs (System)
- * - isPredefinedScheme is derived from Uri.cs (System)
+ * - The GetStatusDescription method is derived from HttpListenerResponse.cs (System.Net)
+ * - The MaybeUri method is derived from Uri.cs (System)
+ * - The isPredefinedScheme method is derived from Uri.cs (System)
  *
  * The MIT License
  *
@@ -14,7 +14,7 @@
  * Copyright (c) 2003 Ben Maurer
  * Copyright (c) 2003, 2005, 2009 Novell, Inc. (http://www.novell.com)
  * Copyright (c) 2009 Stephane Delcroix
- * Copyright (c) 2010-2023 sta.blockhead
+ * Copyright (c) 2010-2025 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -202,21 +202,19 @@ namespace WebSocketSharp
     }
 
     internal static byte[] Compress (
-      this byte[] data, CompressionMethod method
+      this byte[] data,
+      CompressionMethod method
     )
     {
-      return method == CompressionMethod.Deflate
-             ? data.compress ()
-             : data;
+      return method == CompressionMethod.Deflate ? data.compress () : data;
     }
 
     internal static Stream Compress (
-      this Stream stream, CompressionMethod method
+      this Stream stream,
+      CompressionMethod method
     )
     {
-      return method == CompressionMethod.Deflate
-             ? stream.compress ()
-             : stream;
+      return method == CompressionMethod.Deflate ? stream.compress () : stream;
     }
 
     internal static bool Contains (this string value, params char[] anyOf)
@@ -227,7 +225,8 @@ namespace WebSocketSharp
     }
 
     internal static bool Contains (
-      this NameValueCollection collection, string name
+      this NameValueCollection collection,
+      string name
     )
     {
       return collection[name] != null;
@@ -254,7 +253,8 @@ namespace WebSocketSharp
     }
 
     internal static bool Contains<T> (
-      this IEnumerable<T> source, Func<T, bool> condition
+      this IEnumerable<T> source,
+      Func<T, bool> condition
     )
     {
       foreach (T elm in source) {
@@ -307,7 +307,9 @@ namespace WebSocketSharp
     }
 
     internal static void CopyTo (
-      this Stream sourceStream, Stream destinationStream, int bufferLength
+      this Stream sourceStream,
+      Stream destinationStream,
+      int bufferLength
     )
     {
       var buff = new byte[bufferLength];
@@ -365,16 +367,16 @@ namespace WebSocketSharp
     }
 
     internal static byte[] Decompress (
-      this byte[] data, CompressionMethod method
+      this byte[] data,
+      CompressionMethod method
     )
     {
-      return method == CompressionMethod.Deflate
-             ? data.decompress ()
-             : data;
+      return method == CompressionMethod.Deflate ? data.decompress () : data;
     }
 
     internal static Stream Decompress (
-      this Stream stream, CompressionMethod method
+      this Stream stream,
+      CompressionMethod method
     )
     {
       return method == CompressionMethod.Deflate
@@ -383,7 +385,8 @@ namespace WebSocketSharp
     }
 
     internal static byte[] DecompressToArray (
-      this Stream stream, CompressionMethod method
+      this Stream stream,
+      CompressionMethod method
     )
     {
       return method == CompressionMethod.Deflate
@@ -392,7 +395,9 @@ namespace WebSocketSharp
     }
 
     internal static void Emit (
-      this EventHandler eventHandler, object sender, EventArgs e
+      this EventHandler eventHandler,
+      object sender,
+      EventArgs e
     )
     {
       if (eventHandler == null)
@@ -402,7 +407,9 @@ namespace WebSocketSharp
     }
 
     internal static void Emit<TEventArgs> (
-      this EventHandler<TEventArgs> eventHandler, object sender, TEventArgs e
+      this EventHandler<TEventArgs> eventHandler,
+      object sender,
+      TEventArgs e
     )
       where TEventArgs : EventArgs
     {
@@ -511,7 +518,9 @@ namespace WebSocketSharp
     }
 
     internal static string GetValue (
-      this string nameAndValue, char separator, bool unquote
+      this string nameAndValue,
+      char separator,
+      bool unquote
     )
     {
       var idx = nameAndValue.IndexOf (separator);
@@ -525,7 +534,8 @@ namespace WebSocketSharp
     }
 
     internal static bool IsCompressionExtension (
-      this string value, CompressionMethod method
+      this string value,
+      CompressionMethod method
     )
     {
       var extStr = method.ToExtensionString ();
@@ -534,8 +544,15 @@ namespace WebSocketSharp
       return value.StartsWith (extStr, compType);
     }
 
+    internal static bool IsDefined (this CloseStatusCode code)
+    {
+      return Enum.IsDefined (typeof (CloseStatusCode), code);
+    }
+
     internal static bool IsEqualTo (
-      this int value, char c, Action<int> beforeComparing
+      this int value,
+      char c,
+      Action<int> beforeComparing
     )
     {
       beforeComparing (value);
@@ -573,7 +590,7 @@ namespace WebSocketSharp
              || code == 1015;
     }
 
-    internal static bool IsSupportedOpcode (this byte opcode)
+    internal static bool IsSupportedOpcode (this int opcode)
     {
       return Enum.IsDefined (typeof (Opcode), opcode);
     }
@@ -628,14 +645,15 @@ namespace WebSocketSharp
     }
 
     internal static bool KeepsAlive (
-      this NameValueCollection headers, Version version
+      this NameValueCollection headers,
+      Version version
     )
     {
       var compType = StringComparison.OrdinalIgnoreCase;
 
-      return version < HttpVersion.Version11
-             ? headers.Contains ("Connection", "keep-alive", compType)
-             : !headers.Contains ("Connection", "close", compType);
+      return version > HttpVersion.Version10
+             ? !headers.Contains ("Connection", "close", compType)
+             : headers.Contains ("Connection", "keep-alive", compType);
     }
 
     internal static bool MaybeUri (this string value)
@@ -688,7 +706,9 @@ namespace WebSocketSharp
     }
 
     internal static byte[] ReadBytes (
-      this Stream stream, long length, int bufferLength
+      this Stream stream,
+      long length,
+      int bufferLength
     )
     {
       using (var dest = new MemoryStream ()) {
@@ -826,6 +846,7 @@ namespace WebSocketSharp
                     dest.Close ();
 
                     var ret = dest.ToArray ();
+
                     completed (ret);
                   }
 
@@ -839,8 +860,9 @@ namespace WebSocketSharp
                 if (nread == len) {
                   if (completed != null) {
                     dest.Close ();
-                
+
                     var ret = dest.ToArray ();
+
                     completed (ret);
                   }
 
@@ -889,7 +911,8 @@ namespace WebSocketSharp
     }
 
     internal static IEnumerable<string> SplitHeaderValue (
-      this string value, params char[] separators
+      this string value,
+      params char[] separators
     )
     {
       var len = value.Length;
@@ -901,6 +924,7 @@ namespace WebSocketSharp
 
       for (var i = 0; i <= end; i++) {
         var c = value[i];
+
         buff.Append (c);
 
         if (c == '"') {
@@ -987,7 +1011,8 @@ namespace WebSocketSharp
     }
 
     internal static string ToExtensionString (
-      this CompressionMethod method, params string[] parameters
+      this CompressionMethod method,
+      params string[] parameters
     )
     {
       if (method == CompressionMethod.None)
@@ -1037,7 +1062,8 @@ namespace WebSocketSharp
     }
 
     internal static string ToString (
-      this System.Net.IPAddress address, bool bracketIPv6
+      this System.Net.IPAddress address,
+      bool bracketIPv6
     )
     {
       return bracketIPv6
@@ -1088,7 +1114,8 @@ namespace WebSocketSharp
     }
 
     internal static bool TryCreateVersion (
-      this string versionString, out Version result
+      this string versionString,
+      out Version result
     )
     {
       result = null;
@@ -1104,7 +1131,9 @@ namespace WebSocketSharp
     }
 
     internal static bool TryCreateWebSocketUri (
-      this string uriString, out Uri result, out string message
+      this string uriString,
+      out Uri result,
+      out string message
     )
     {
       result = null;
@@ -1128,7 +1157,7 @@ namespace WebSocketSharp
       var valid = schm == "ws" || schm == "wss";
 
       if (!valid) {
-        message = "The scheme part is not 'ws' or 'wss'.";
+        message = "The scheme part is not \"ws\" or \"wss\".";
 
         return false;
       }
@@ -1167,7 +1196,8 @@ namespace WebSocketSharp
     }
 
     internal static bool TryGetUTF8DecodedString (
-      this byte[] bytes, out string s
+      this byte[] bytes,
+      out string s
     )
     {
       s = null;
@@ -1183,7 +1213,8 @@ namespace WebSocketSharp
     }
 
     internal static bool TryGetUTF8EncodedBytes (
-      this string s, out byte[] bytes
+      this string s,
+      out byte[] bytes
     )
     {
       bytes = null;
@@ -1199,7 +1230,8 @@ namespace WebSocketSharp
     }
 
     internal static bool TryOpenRead (
-      this FileInfo fileInfo, out FileStream fileStream
+      this FileInfo fileInfo,
+      out FileStream fileStream
     )
     {
       fileStream = null;
@@ -1234,7 +1266,8 @@ namespace WebSocketSharp
     }
 
     internal static bool Upgrades (
-      this NameValueCollection headers, string protocol
+      this NameValueCollection headers,
+      string protocol
     )
     {
       var compType = StringComparison.OrdinalIgnoreCase;
@@ -1256,7 +1289,9 @@ namespace WebSocketSharp
     }
 
     internal static void WriteBytes (
-      this Stream stream, byte[] bytes, int bufferLength
+      this Stream stream,
+      byte[] bytes,
+      int bufferLength
     )
     {
       using (var src = new MemoryStream (bytes))

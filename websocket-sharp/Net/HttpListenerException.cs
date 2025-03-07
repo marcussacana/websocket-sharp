@@ -8,7 +8,7 @@
  * The MIT License
  *
  * Copyright (c) 2005 Novell, Inc. (http://www.novell.com)
- * Copyright (c) 2012-2021 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -54,8 +54,7 @@ namespace WebSocketSharp.Net
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HttpListenerException"/>
-    /// class from the specified instances of the <see cref="SerializationInfo"/>
-    /// and <see cref="StreamingContext"/> classes.
+    /// class with the specified serialized data.
     /// </summary>
     /// <param name="serializationInfo">
     /// A <see cref="SerializationInfo"/> that contains the serialized
@@ -65,8 +64,12 @@ namespace WebSocketSharp.Net
     /// A <see cref="StreamingContext"/> that specifies the source for
     /// the deserialization.
     /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="serializationInfo"/> is <see langword="null"/>.
+    /// </exception>
     protected HttpListenerException (
-      SerializationInfo serializationInfo, StreamingContext streamingContext
+      SerializationInfo serializationInfo,
+      StreamingContext streamingContext
     )
       : base (serializationInfo, streamingContext)
     {

@@ -5,7 +5,7 @@
  * The MIT License
  *
  * Copyright (c) 2014 liryna
- * Copyright (c) 2014-2023 sta.blockhead
+ * Copyright (c) 2014-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,8 @@ using System.Security.Cryptography.X509Certificates;
 namespace WebSocketSharp.Net
 {
   /// <summary>
-  /// Stores the parameters for the <see cref="SslStream"/> used by servers.
+  /// Stores the parameters for <see cref="SslStream"/> instances used by
+  /// a server.
   /// </summary>
   public class ServerSslConfiguration
   {
@@ -117,12 +118,12 @@ namespace WebSocketSharp.Net
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the client is asked for
+    /// Gets or sets a value indicating whether each client is asked for
     /// a certificate for authentication.
     /// </summary>
     /// <value>
     ///   <para>
-    ///   <c>true</c> if the client is asked for a certificate for
+    ///   <c>true</c> if each client is asked for a certificate for
     ///   authentication; otherwise, <c>false</c>.
     ///   </para>
     ///   <para>
@@ -141,7 +142,7 @@ namespace WebSocketSharp.Net
 
     /// <summary>
     /// Gets or sets the callback used to validate the certificate supplied by
-    /// the client.
+    /// each client.
     /// </summary>
     /// <remarks>
     /// The certificate is valid if the callback returns <c>true</c>.
@@ -151,12 +152,11 @@ namespace WebSocketSharp.Net
     ///   A <see cref="RemoteCertificateValidationCallback"/> delegate.
     ///   </para>
     ///   <para>
-    ///   The delegate invokes the method called when the server validates
+    ///   It represents the delegate called when the server validates
     ///   the certificate.
     ///   </para>
     ///   <para>
-    ///   The default value is a delegate that invokes a method that only
-    ///   returns <c>true</c>.
+    ///   The default value invokes a method that only returns <c>true</c>.
     ///   </para>
     /// </value>
     public RemoteCertificateValidationCallback ClientCertificateValidationCallback {

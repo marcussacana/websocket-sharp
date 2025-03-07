@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2014-2023 sta.blockhead
+ * Copyright (c) 2014-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -169,7 +169,10 @@ namespace WebSocketSharp.Net
     #region Internal Methods
 
     internal bool IsValid (
-      string password, string realm, string method, string entity
+      string password,
+      string realm,
+      string method,
+      string entity
     )
     {
       var parameters = new NameValueCollection (_parameters);
@@ -179,9 +182,9 @@ namespace WebSocketSharp.Net
       parameters["method"] = method;
       parameters["entity"] = entity;
 
-      var expected = AuthenticationResponse.CreateRequestDigest (parameters);
+      var expectedDigest = AuthenticationResponse.CreateRequestDigest (parameters);
 
-      return _parameters["response"] == expected;
+      return _parameters["response"] == expectedDigest;
     }
 
     #endregion

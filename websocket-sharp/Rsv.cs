@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2015 sta.blockhead
+ * Copyright (c) 2012-2025 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,13 +31,15 @@ using System;
 namespace WebSocketSharp
 {
   /// <summary>
-  /// Indicates whether each RSV (RSV1, RSV2, and RSV3) of a WebSocket frame is non-zero.
+  /// Indicates whether each RSV (RSV1, RSV2, and RSV3) of a WebSocket
+  /// frame is non-zero.
   /// </summary>
   /// <remarks>
   /// The values of this enumeration are defined in
-  /// <see href="http://tools.ietf.org/html/rfc6455#section-5.2">Section 5.2</see> of RFC 6455.
+  /// <see href="http://tools.ietf.org/html/rfc6455#section-5.2">
+  /// Section 5.2</see> of RFC 6455.
   /// </remarks>
-  internal enum Rsv : byte
+  internal enum Rsv
   {
     /// <summary>
     /// Equivalent to numeric value 0. Indicates zero.

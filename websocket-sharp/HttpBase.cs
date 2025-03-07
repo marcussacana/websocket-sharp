@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -96,8 +96,10 @@ namespace WebSocketSharp
       get {
         var buff = new StringBuilder (64);
 
+        var fmt = "{0}: {1}{2}";
+
         foreach (var key in _headers.AllKeys)
-          buff.AppendFormat ("{0}: {1}{2}", key, _headers[key], CrLf);
+          buff.AppendFormat (fmt, key, _headers[key], CrLf);
 
         buff.Append (CrLf);
 
@@ -161,13 +163,13 @@ namespace WebSocketSharp
       long len;
 
       if (!Int64.TryParse (length, out len)) {
-        var msg = "It cannot be parsed.";
+        var msg = "It could not be parsed.";
 
         throw new ArgumentException (msg, "length");
       }
 
       if (len < 0) {
-        var msg = "It is less than zero.";
+        var msg = "Less than zero.";
 
         throw new ArgumentOutOfRangeException ("length", msg);
       }
@@ -236,7 +238,9 @@ namespace WebSocketSharp
     #region Protected Methods
 
     protected static T Read<T> (
-      Stream stream, Func<string[], T> parser, int millisecondsTimeout
+      Stream stream,
+      Func<string[], T> parser,
+      int millisecondsTimeout
     )
       where T : HttpBase
     {
@@ -246,6 +250,7 @@ namespace WebSocketSharp
       var timer = new Timer (
                     state => {
                       timeout = true;
+
                       stream.Close ();
                     },
                     null,

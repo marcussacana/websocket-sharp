@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,8 @@ namespace WebSocketSharp.Net.WebSockets
     #region Internal Constructors
 
     internal HttpListenerWebSocketContext (
-      HttpListenerContext context, string protocol
+      HttpListenerContext context,
+      string protocol
     )
     {
       _context = context;
@@ -373,6 +374,7 @@ namespace WebSocketSharp.Net.WebSockets
     internal void Close (HttpStatusCode code)
     {
       _context.Response.StatusCode = (int) code;
+
       _context.Response.Close ();
     }
 

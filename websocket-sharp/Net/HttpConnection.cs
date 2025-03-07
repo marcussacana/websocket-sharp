@@ -8,7 +8,7 @@
  * The MIT License
  *
  * Copyright (c) 2005 Novell, Inc. (http://www.novell.com)
- * Copyright (c) 2012-2022 sta.blockhead
+ * Copyright (c) 2012-2025 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -68,6 +68,7 @@ namespace WebSocketSharp.Net
     private EndPointListener      _endPointListener;
     private InputState            _inputState;
     private RequestStream         _inputStream;
+    private bool                  _isSecure;
     private LineState             _lineState;
     private EndPoint              _localEndPoint;
     private static readonly int   _maxInputLength;
@@ -76,7 +77,6 @@ namespace WebSocketSharp.Net
     private EndPoint              _remoteEndPoint;
     private MemoryStream          _requestBuffer;
     private int                   _reuses;
-    private bool                  _secure;
     private Socket                _socket;
     private Stream                _stream;
     private object                _sync;
@@ -120,7 +120,7 @@ namespace WebSocketSharp.Net
           sslConf.CheckCertificateRevocation
         );
 
-        _secure = true;
+        _isSecure = true;
         _stream = sslStream;
       }
       else {
@@ -156,7 +156,7 @@ namespace WebSocketSharp.Net
 
     public bool IsSecure {
       get {
-        return _secure;
+        return _isSecure;
       }
     }
 
@@ -451,7 +451,10 @@ namespace WebSocketSharp.Net
     }
 
     private string readLineFrom (
-      byte[] buffer, int offset, int length, out int nread
+      byte[] buffer,
+      int offset,
+      int length,
+      out int nread
     )
     {
       nread = 0;
@@ -601,10 +604,18 @@ namespace WebSocketSharp.Net
 
         _inputStream = chunked
                        ? new ChunkedRequestStream (
-                           _stream, buff, _position, cnt, _context
+                           _stream,
+                           buff,
+                           _position,
+                           cnt,
+                           _context
                          )
                        : new RequestStream (
-                           _stream, buff, _position, cnt, contentLength
+                           _stream,
+                           buff,
+                           _position,
+                           cnt,
+                           contentLength
                          );
 
         disposeRequestBuffer ();

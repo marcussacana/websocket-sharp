@@ -4,7 +4,7 @@
  *
  * The MIT License
  *
- * Copyright (c) 2013-2022 sta.blockhead
+ * Copyright (c) 2013-2024 sta.blockhead
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -91,8 +91,12 @@ namespace WebSocketSharp
     /// Gets the logging level of the log data.
     /// </summary>
     /// <value>
-    /// One of the <see cref="LogLevel"/> enum values that represents
-    /// the logging level of the log data.
+    ///   <para>
+    ///   One of the <see cref="LogLevel"/> enum values.
+    ///   </para>
+    ///   <para>
+    ///   It represents the logging level of the log data.
+    ///   </para>
     /// </value>
     public LogLevel Level {
       get {
@@ -144,8 +148,8 @@ namespace WebSocketSharp
 
       buff.AppendFormat ("{0} {1} {2}\n\n", date, level, caller);
 
-      for (var i = 0; i < msgs.Length; i++)
-        buff.AppendFormat ("  {0}\n", msgs[i]);
+      foreach (var msg in msgs)
+        buff.AppendFormat ("  {0}\n", msg);
 
       return buff.ToString ();
     }
